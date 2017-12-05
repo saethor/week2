@@ -12,6 +12,16 @@ module.exports = function(injected){
                     gameState.processEvents(events);
 
                     // Check here for game state that may result in additional events
+                    if (gameState.gameWon()){
+                        events.push({
+                            gameId: cmd.gameId,
+                            type: "GameWon",
+                            user: cmd.user,
+                            name: cmd.name,
+                            side: cmd.side,
+                            timeStamp: cmd.timeStamp
+                        });
+                    }
                     eventHandler(events);
                 }
 
@@ -82,6 +92,7 @@ module.exports = function(injected){
                             }])
                             return;
                         };
+                        
                         applyEvents([{
                             gameId: cmd.gameId,
                             type: "MovePlaced",
@@ -93,7 +104,7 @@ module.exports = function(injected){
                             },
                             side: cmd.side,
                             timeStamp: cmd.timeStamp
-                        }])
+                        }]);
                     },
                     "RequestGameHistory": function(cmd){
                         // Game does not handle this query command, is declared here for making tests more robust.

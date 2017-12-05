@@ -27,6 +27,22 @@ let joinEvent = {
     timeStamp: "2014-12-02T11:29:29"
 };
 
+function moveEvent(user, x, y, side){
+    return {
+        gameId:"123987",
+        type: "MovePlaced",
+        user: {
+            userName: user
+        },
+        name: "TheFirstGame",
+        cord: {
+            x: x,
+            y: y
+        },
+        side: side,
+        timeStamp: "2014-12-02T11:30:29"
+    }
+}
 
 describe('create game command', function() {
 
@@ -313,5 +329,56 @@ describe('Place move command', function() {
                 timeStamp: "2014-12-02T11:32:29"
             }
         ];
-    })
+    });
+
+    fit("It should emit gameWon when game is won vertically", function(){
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent("TheGuy", 0, 0, "X"),
+            moveEvent("Gummi", 1, 1, "O"),
+            moveEvent("TheGuy", 0, 1, "X"),
+            moveEvent("Gummi", 1, 0, "O")
+        ];
+        when = {
+            gameId:"123987",
+            type: "PlaceMove",
+            user: {
+                userName: "TheGuy"
+            },
+            name: "TheFirstGame",
+            cord: {
+                x: 0,
+                y: 2
+            },
+            side: "X",
+            timeStamp: "2014-12-02T11:32:29", 
+        };
+        then = [
+            {
+                gameId: "123987",
+                type: "MovePlaced",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 0,
+                    y: 2
+                },
+                side: "X",
+                timeStamp: "2014-12-02T11:32:29"
+            },
+            {
+                gameId: "123987",
+                type:"GameWon",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                side: "X",
+                timeStamp: "2014-12-02T11:32:29"
+            }
+        ];
+    });
 })
