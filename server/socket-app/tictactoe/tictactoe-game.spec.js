@@ -165,3 +165,55 @@ describe('join game command', function () {
     });
 });
 
+describe('Place move command', function() {
+
+    let given, when, then;
+    
+    beforeEach(function () {
+        given = undefined;
+        when = undefined;
+        then = undefined;
+    });
+    
+    afterEach(function () {
+        tictactoe(given).executeCommand(when, function (actualEvents) {
+            should(JSON.stringify(actualEvents)).be.exactly(JSON.stringify(then));
+        });
+    });
+
+    it('should emit MovePlaced on first game move', function() {
+
+        given = [
+            createEvent,
+            joinEvent
+        ]
+        when = {
+            type: "PlaceMove",
+            user: {
+                userName: "Gunni"
+            },
+            name: "TheFirstGame",
+            cord: {
+                x: 1,
+                y: 2
+            },
+            side: "X",
+            timeStamp: "2014-12-02T11:30:29", 
+        };
+        then = [
+            {
+                type: "MovePlaced",
+                user: {
+                    userName: "Gunni"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 1,
+                    y: 2
+                },
+                side: "X",
+                timeStamp: "2014-12-02T11:30:29"
+            }
+        ]
+    });
+})

@@ -58,12 +58,18 @@ module.exports = function(injected){
                         }]);
                     },
                     "PlaceMove": function(cmd){
-
-
-                        // Check here for conditions which prevent command from altering state
-
-
-
+                        applyEvents([{
+                            gameId: cmd.gameId,
+                            type: "MovePlaced",
+                            user: cmd.user,
+                            name: cmd.name,
+                            cord: {
+                                x: cmd.cord.x,
+                                y: cmd.cord.y
+                            },
+                            side: cmd.side,
+                            timeStamp: cmd.timeStamp
+                        }])
                     },
                     "RequestGameHistory": function(cmd){
                         // Game does not handle this query command, is declared here for making tests more robust.
