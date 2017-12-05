@@ -6,7 +6,7 @@ module.exports = function (injected) {
         let gamefull = false;
         
         function processEvent(event) {
-            if (event.type === "JoinGame"){
+            if (event.type === "GameJoined"){
                 gamefull = true;
             }
         }
