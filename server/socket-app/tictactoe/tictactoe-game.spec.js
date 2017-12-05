@@ -138,7 +138,7 @@ describe('join game command', function () {
                 timeStamp: "2014-12-02T11:29:29"
             },
             {
-                type: "JoinGame",
+                type: "GameJoined",
                 user: {
                     userName: "Gummi"
                 },

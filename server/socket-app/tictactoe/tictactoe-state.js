@@ -8,7 +8,7 @@ module.exports = function (injected) {
         let board = [[false, false, false], [false, false,false], [false, false, false]];
 
         function processEvent(event) {
-            if (event.type === "JoinGame"){
+            if (event.type === "GameJoined"){
                 gamefull = true;
             }
             if (event.type === "MovePlaced") {
