@@ -4,18 +4,16 @@ module.exports = function (injected) {
 
     return function (history) {
         let gamefull = false;
-        let illegalmove = false;
         let board = [[false, false, false], [false, false,false], [false, false, false]];
+        let player = false;
 
         function processEvent(event) {
             if (event.type === "GameJoined"){
                 gamefull = true;
             }
             if (event.type === "MovePlaced") {
-                if (!board[event.cord.y][event.cord.x]) {
-                    illegalmove = true;
-                    board[event.cord.y][event.cord.x] = true;
-                }
+                board[event.cord.y][event.cord.x] = true;
+                player = !player;
             }
         }
 
@@ -23,8 +21,12 @@ module.exports = function (injected) {
             return gamefull;
         }
 
-        function illegalMove() {
-            return illegalmove;
+        function illegalMove(x, y) {
+            return board[y][x];
+        }
+
+        function playerTurn(side){
+            return (player && side === "O") || (!player && side === "X");
         }
 
         function processEvents(history) {
@@ -36,6 +38,7 @@ module.exports = function (injected) {
         return {
             gameFull: gameFull,
             illegalMove: illegalMove,
+            playerTurn: playerTurn,
             processEvents: processEvents,
         }
     };

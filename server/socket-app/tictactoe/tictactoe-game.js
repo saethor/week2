@@ -58,7 +58,17 @@ module.exports = function(injected){
                         }]);
                     },
                     "PlaceMove": function(cmd) {
-                        if (gameState.illegalMove()) {
+                        if (!gameState.playerTurn(cmd.side)){
+                            applyEvents([{
+                                gameId: cmd.gameId,
+                                type: "NotYourMove",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp
+                            }]);
+                            return;
+                        }
+                        if (gameState.illegalMove(cmd.cord.x, cmd.cord.y)) {
                             applyEvents([{
                                 gameId: cmd.gameId,
                                 type: "IllegalMove",
