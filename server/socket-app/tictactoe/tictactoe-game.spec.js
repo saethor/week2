@@ -73,7 +73,7 @@ describe('create game command', function() {
 });
 
 
-fdescribe('join game command', function () {
+describe('join game command', function () {
 
 
     let given, when, then;
@@ -125,8 +125,43 @@ fdescribe('join game command', function () {
 
     });
 
-    it('should emit FullGameJoinAttempted event when game full..implement this', function () {
-        expect(true).toBe(false);
+    it('should emit FullGameJoinAttempted event when game full', function () {
+        given = [
+            {
+                type: "GameCreated",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            },
+            {
+                type: "JoinGame",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }
+        ];
+        when = {
+            type: "JoinGame",
+            user: {
+                userName: "Gunni"
+            },
+            name: "TheFirstGame",
+            timeStamp: "2014-12-02T11:30:29"
+        };
+        then = [
+            {
+                type: "FullGameJoinAttempted",
+                user: {
+                    userName: "Gunni"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:30:29",
+            }
+        ]
     });
 });
 

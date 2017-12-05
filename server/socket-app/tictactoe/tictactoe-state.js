@@ -3,11 +3,16 @@ const _ = require('lodash');
 module.exports = function (injected) {
 
     return function (history) {
+        let gamefull = false;
+        
         function processEvent(event) {
+            if (event.type === "JoinGame"){
+                gamefull = true;
+            }
         }
 
         function gameFull(){
-            return false;
+            return gamefull;
         }
 
         function processEvents(history) {
