@@ -483,4 +483,59 @@ describe('Place move command', function() {
             }
         ];
     });
+
+    it("It should emit gameWon if one on last move", function(){
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent("TheGuy", 0, 0, "X"),
+            moveEvent("Gummi", 0, 1, "O"),
+            moveEvent("TheGuy", 0, 2, "X"),
+            moveEvent("Gummi", 1, 0, "O"),
+            moveEvent("TheGuy", 1, 1, "O"),
+            moveEvent("Gummi", 1, 2, "O"),
+            moveEvent("TheGuy", 2, 1, "O"),
+            moveEvent("Gummi", 2, 0, "O")
+        ];
+        when = {
+            gameId:"123987",
+            type: "PlaceMove",
+            user: {
+                userName: "TheGuy"
+            },
+            name: "TheFirstGame",
+            cord: {
+                x: 2,
+                y: 2
+            },
+            side: "X",
+            timeStamp: "2014-12-02T11:32:29", 
+        };
+        then = [
+            {
+                gameId: "123987",
+                type: "MovePlaced",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 2,
+                    y: 2
+                },
+                side: "X",
+                timeStamp: "2014-12-02T11:32:29"
+            },
+            {
+                gameId: "123987",
+                type:"GameWon",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                side: "X",
+                timeStamp: "2014-12-02T11:32:29"
+            }
+        ];
+    });
 })

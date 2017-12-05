@@ -7,6 +7,7 @@ module.exports = function (injected) {
         let board = [[undefined, undefined, undefined], [undefined, undefined, undefined], [undefined, undefined, undefined]];
         let player = false;
         let gameover = false;
+        let moves = 9;
 
         function processEvent(event) {
             if (event.type === "GameJoined"){
@@ -15,7 +16,7 @@ module.exports = function (injected) {
             if (event.type === "MovePlaced") {
                 board[event.cord.y][event.cord.x] = event.side;
                 player = !player;
-                
+                moves--;                
             }
         }
 
