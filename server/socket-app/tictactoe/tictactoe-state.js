@@ -20,6 +20,10 @@ module.exports = function (injected) {
             }
         }
 
+        function isDraw() {
+            return !gameover && moves == 0;
+        }
+
         function gameFull(){
             return gamefull;
         }
@@ -60,6 +64,7 @@ module.exports = function (injected) {
             illegalMove: illegalMove,
             playerTurn: playerTurn,
             gameWon: gameWon,
+            isDraw: isDraw,
             processEvents: processEvents,
         }
     };

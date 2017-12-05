@@ -492,9 +492,9 @@ describe('Place move command', function() {
             moveEvent("Gummi", 0, 1, "O"),
             moveEvent("TheGuy", 0, 2, "X"),
             moveEvent("Gummi", 1, 0, "O"),
-            moveEvent("TheGuy", 1, 1, "O"),
+            moveEvent("TheGuy", 1, 1, "X"),
             moveEvent("Gummi", 1, 2, "O"),
-            moveEvent("TheGuy", 2, 1, "O"),
+            moveEvent("TheGuy", 2, 1, "X"),
             moveEvent("Gummi", 2, 0, "O")
         ];
         when = {
@@ -529,6 +529,61 @@ describe('Place move command', function() {
             {
                 gameId: "123987",
                 type:"GameWon",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                side: "X",
+                timeStamp: "2014-12-02T11:32:29"
+            }
+        ];
+    });
+
+    it("It should emit gameDraw if game is draw", function(){
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent("TheGuy", 0, 0, "X"),
+            moveEvent("Gummi", 1, 0, "O"),
+            moveEvent("TheGuy", 2, 0, "X"),
+            moveEvent("Gummi", 0, 1, "O"),
+            moveEvent("TheGuy", 1, 1, "X"),
+            moveEvent("Gummi", 0, 2, "O"),
+            moveEvent("TheGuy", 2, 1, "X"),
+            moveEvent("Gummi", 2, 2, "O")
+        ];
+        when = {
+            gameId:"123987",
+            type: "PlaceMove",
+            user: {
+                userName: "TheGuy"
+            },
+            name: "TheFirstGame",
+            cord: {
+                x: 1,
+                y: 2
+            },
+            side: "X",
+            timeStamp: "2014-12-02T11:32:29", 
+        };
+        then = [
+            {
+                gameId: "123987",
+                type: "MovePlaced",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 1,
+                    y: 2
+                },
+                side: "X",
+                timeStamp: "2014-12-02T11:32:29"
+            },
+            {
+                gameId: "123987",
+                type:"GameDraw",
                 user: {
                     userName: "TheGuy"
                 },
