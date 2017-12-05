@@ -331,7 +331,7 @@ describe('Place move command', function() {
         ];
     });
 
-    fit("It should emit gameWon when game is won vertically", function(){
+    it("It should emit gameWon when game is won vertically", function(){
         given = [
             createEvent,
             joinEvent,
