@@ -8,6 +8,7 @@ let tictactoe = require('./tictactoe-game')(inject({
 }));
 
 let createEvent = {
+    gameId:"123987",
     type: "GameCreated",
     user: {
         userName: "TheGuy"
@@ -17,6 +18,7 @@ let createEvent = {
 };
 
 let joinEvent = {
+    gameId:"123987",
     type: "GameJoined",
     user: {
         userName: "Gummi"
@@ -214,6 +216,56 @@ describe('Place move command', function() {
                 side: "X",
                 timeStamp: "2014-12-02T11:30:29"
             }
-        ]
+        ];
     });
+
+    it('Should emit Illegal move when square is already occupied', function() {
+        given = [
+            createEvent,
+            joinEvent,
+            {
+                gameId:"123987",
+                type: "MovePlaced",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 1,
+                    y: 2
+                },
+                side: "X",
+                timeStamp: "2014-12-02T11:30:29"
+            }
+        ];
+        when = {
+            gameId:"123987",
+            type: "PlaceMove",
+            user: {
+                userName: "Gummi"
+            },
+            name: "TheFirstGame",
+            cord: {
+                x: 1,
+                y: 2
+            },
+            side: "O",
+            timeStamp: "2014-12-02T11:32:29", 
+        };
+        then = [
+            {
+                gameId:"123987",
+                type: "IllegalMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 1,
+                    y: 2
+                },
+                timeStamp: "2014-12-02T11:32:29"
+            }
+        ];
+    })
 })
