@@ -24,3 +24,8 @@ __Given__ a game was created by TheGuy and Gummi had joined the game, and TheGuy
 
 ### Test when a game is won with a reverse diagonal row
 __Given__ a game was created by TheGuy and Gummi had joined the game, and TheGuy had placed two moves going diagonally down from top right corner and Gummi had placed two moves anywhere except bottom left slot. __When__ TheGuy places a move in the bottom left slot __then__ two events are emitted, MovePlaced and GameWon.
+
+### Test winning with last placement
+__Given__ a game was created by TheGuy and Gummi had joined the game, and each player has placed moves where neither has managed to win the game and placing in the only remaining slot will lead to a win for TheGuy. __When__ TheGuy places a move in the final slot __then__ two events are emttted, MovePlaced and GameWon.
+
+ 
