@@ -1,10 +1,6 @@
 node {
     checkout scm
-    stages {
-        stage('Commit') {
-            steps {
-                sh 'npm run test'
-            }
-        }
+    stage('Commit') {
+            sh 'npm run test'
     }
 }
