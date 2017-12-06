@@ -16,3 +16,6 @@ __Given__ a game was created by TheGuy and Gummi had joined the game, __when__ G
 ### Test when a game is won with a vertical row
 __Given__ a game was created by TheGuy and Gummi had joined the game, and both players have placed two moves each in a vertical line. __When__ TheGuy places a move in the last vertical slot __then__ two events are emitted, MovePlaced and GameWon.
 
+### Test when a game is won with a horizontal row
+__Given__ a game was created by TheGuy and Gummi had joined the game, and both players have placed two moves each in a horizontal line. __When__ TheGuy places a move in the last horizontal slot __then__ two events are emitted, MovePlaced and GameWon.
+
