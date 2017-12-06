@@ -6,10 +6,11 @@ pipeline {
         }
     }
     stages {
-        checkout scm
         stage('Commit') {
+            steps {
                 sh 'npm install'
                 sh 'npm run test'
+            }
         }
     }
 }
