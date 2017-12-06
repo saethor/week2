@@ -8,7 +8,7 @@ node {
             sh 'npm install'
         }
         sh 'npm run test'
-        docker.withRegistry('https://hub.docker.com/u/hgophopur1/', 'docker-hub-credentials') {
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
             sh './dockerbuild.sh'
         }
     }

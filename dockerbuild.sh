@@ -3,6 +3,7 @@
 echo Cleaning...
 rm -rf ./dist
 
+docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
 
 if [ -z "$GIT_COMMIT" ]; then
   export GIT_COMMIT=$(git rev-parse HEAD)
