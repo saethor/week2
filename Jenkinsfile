@@ -3,6 +3,7 @@ node {
     env.PATH = "${nodeHome}/bin:${env.PATH}"
     checkout scm
     stage('Commit') {
+            sh 'npm install'
             sh 'npm run test'
     }
 }
