@@ -10,6 +10,9 @@ __Given__ a game was created by TheGuy and Gummi had joined the game, __when__ t
 ### Test placing a move in an already occupied square
 __Given__ a game was created by TheGuy and Gummi had joined the game, and a move has been placed. __When__ a move is placed on an already occupied square __then__ an IllegalMove event should be dispatched.
 
+### Test placing a move out of bounds
+__Given__ a game was created by TheGuy and Gummi had joined the game, __when__ a move is placed out of bounds of the grid __then__ an IllegalMove event should be dispatched.
+
 ### Test placing a move when it is not your turn
 __Given__ a game was created by TheGuy and Gummi had joined the game, __when__ Gummi tries to place a move __then__ a NotYourMove event should be dispatched.
 
