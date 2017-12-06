@@ -4,6 +4,9 @@ node {
     checkout scm
     stage('Commit') {
         sh 'npm install'
+        sh 'cd client'
+        sh 'npm install'
+        sh 'cd ..'
         sh 'npm run test'
         sh './dockerbuild.sh'
     }
