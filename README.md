@@ -29,9 +29,16 @@ npm install -g create-react-app
 ## Getting started:
 
 Install and run postgres docker image for development.
+The postgres docker image takes a few seconds to setup the database when creating a new container.
+So we sleep for 10 seconds before running database migration scripts.
 ```
-npm run startpostgres && npm run migratedb
+npm run startpostgres && sleep 10 && npm run migratedb
 ```
+Note: You might also run into problems if you have any residual postgres containers from week 1 since the startpostgres command will try to use them instead of creating a new container. Remove the containers from week 1 to resolve this issue.
+
+~~There is also a problem with the migratedb command, when you run it against an already migrated database it fails. We are working on a fix mean while just avoid migrating the database more than once. You can safly ignore this for day 6 and 7. (We temporarily removed the migratedb command from the startserver command)~~
+**This should be fixed, see `database.json` diff, so the `npm run startserver` is back to normal, see `package.json` diff**
+**Please submit an issue if you still have problems**
 
 In project root directory, install NPM dependencies:
 
