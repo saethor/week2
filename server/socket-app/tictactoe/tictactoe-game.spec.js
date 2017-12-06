@@ -285,6 +285,42 @@ describe('Place move command', function() {
         ];
     });
 
+    it('Should emit Illegal move a move is placed out of bounds', function() {
+        given = [
+            createEvent,
+            joinEvent
+        ];
+        when = {
+            gameId:"123987",
+            type: "PlaceMove",
+            user: {
+                userName: "TheGuy"
+            },
+            name: "TheFirstGame",
+            cord: {
+                x: -1,
+                y: 2
+            },
+            side: "X",
+            timeStamp: "2014-12-02T11:32:29", 
+        };
+        then = [
+            {
+                gameId:"123987",
+                type: "IllegalMove",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: -1,
+                    y: 2
+                },
+                timeStamp: "2014-12-02T11:32:29"
+            }
+        ];
+    });
+
     it('Should emit not your move when attempting to move out of turn', function() {
         given = [
             createEvent,

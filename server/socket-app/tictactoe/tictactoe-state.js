@@ -6,7 +6,6 @@ module.exports = function (injected) {
         let gamefull = false;
         let board = [[undefined, undefined, undefined], [undefined, undefined, undefined], [undefined, undefined, undefined]];
         let player = false;
-        let gameover = false;
         let moves = 9;
 
         function processEvent(event) {
@@ -21,7 +20,7 @@ module.exports = function (injected) {
         }
 
         function isDraw() {
-            return !gameover && moves == 0;
+            return moves == 0;
         }
 
         function gameFull(){
@@ -29,11 +28,15 @@ module.exports = function (injected) {
         }
 
         function illegalMove(x, y) {
-            return board[y][x] !== undefined;
+            return !checkBounds(x, y) || board[y][x] !== undefined;
         }
 
         function playerTurn(side){
             return (player && side === "O") || (!player && side === "X");
+        }
+
+        function checkBounds(x, y){
+            return x < 3 && x >= 0 && y < 3 && y >= 0;
         }
 
         function gameWon(){
