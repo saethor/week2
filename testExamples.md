@@ -12,3 +12,7 @@ __Given__ a game was created by TheGuy and Gummi had joined the game, and a move
 
 ### Test placing a move when it is not your turn
 __Given__ a game was created by TheGuy and Gummi had joined the game, __when__ Gummi tries to place a move __then__ a NotYourMove event should be dispatched.
+
+### Test when a game is won with a vertical row
+__Given__ a game was created by TheGuy and Gummi had joined the game, and both players have placed two moves each in a vertical line. __When__ TheGuy places a move in the last vertical slot __then__ two events are emitted, MovePlaced and GameWon.
+
