@@ -1,9 +1,10 @@
 node {
     checkout scm
-    stage('Commit') {
-        steps {
-            npm run test
+    stages {
+        stage('Commit') {
+            steps {
+                sh 'npm run test'
+            }
         }
-        // Build image
     }
 }
