@@ -35,7 +35,7 @@ fi
 MY_PUBLIC_IP=$(curl http://checkip.amazonaws.com)
 if [ ! -e ./ec2_instance/instance-id.txt ]; then
     echo Create ec2 instance on security group ${SECURITY_GROUP_ID} ${AMI_IMAGE_ID}
-    INSTANCE_INIT_SCRIPT=ec2-instance-init.sh
+    INSTANCE_INIT_SCRIPT=docker-instance-init.sh
     INSTANCE_ID=$(aws ec2 run-instances  --user-data file://${INSTANCE_INIT_SCRIPT} --image-id ${AMI_IMAGE_ID} --security-group-ids ${SECURITY_GROUP_ID} --count 1 --instance-type t2.micro --key-name ${SECURITY_GROUP_NAME} --query 'Instances[0].InstanceId'  --output=text)
     echo ${INSTANCE_ID} > ./ec2_instance/instance-id.txt
 
