@@ -12,4 +12,7 @@ node {
             sh './dockerbuild.sh'
         }
     }
+    stage('Deploy') {
+        sh './provisioning/provision-new-environment.sh'
+    }
 }
