@@ -28,4 +28,5 @@ __Given__ a game was created by TheGuy and Gummi had joined the game, and TheGuy
 ### Test winning with last placement
 __Given__ a game was created by TheGuy and Gummi had joined the game, and each player has placed moves where neither has managed to win the game and placing in the only remaining slot will lead to a win for TheGuy. __When__ TheGuy places a move in the final slot __then__ two events are emttted, MovePlaced and GameWon.
 
- 
+### Test draw
+__Given__ a game was created by TheGuy and Gummi had joined the game, and each player has placed moves where neither has managed to win the game and placing in the only remaining slot will lead to a draw. __When__ TheGuy places a move in the final slot __then__ two events are emitted, MovePlaced and GameDraw.
