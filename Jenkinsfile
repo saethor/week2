@@ -13,6 +13,8 @@ node {
         }
     }
     stage('Deploy') {
-        sh './provisioning/provision-new-environment.sh'
+        dir('provisioning'){
+            sh './provision-new-environment.sh'
+        }
     }
 }
