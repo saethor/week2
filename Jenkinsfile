@@ -1,16 +1,10 @@
-pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
-    }
-    stages {
-        stage('Commit') {
-            steps {
-                sh 'npm install'
-                sh 'npm run test'
-            }
-        }
+node {
+    def nodeHome = tool name: 'Node691', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+    env.PATH = "${nodeHome}/bin:${env.PATH}"
+    checkout scm
+    stage('Commit') {
+        sh 'npm install'
+        sh 'npm run test'
+        sh './dockerbuild.sh'
     }
 }
