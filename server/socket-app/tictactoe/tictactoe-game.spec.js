@@ -289,33 +289,19 @@ describe('Place move command', function() {
         given = [
             createEvent,
             joinEvent,
-            {
-                gameId:"123987",
-                type: "MovePlaced",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 1,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:30:29"
-            }
         ];
         when = {
             gameId:"123987",
             type: "PlaceMove",
             user: {
-                userName: "TheGuy"
+                userName: "Gummi"
             },
             name: "TheFirstGame",
             cord: {
                 x: 1,
                 y: 2
             },
-            side: "X",
+            side: "O",
             timeStamp: "2014-12-02T11:32:29", 
         };
         then = [
@@ -323,7 +309,7 @@ describe('Place move command', function() {
                 gameId:"123987",
                 type: "NotYourMove",
                 user: {
-                    userName: "TheGuy"
+                    userName: "Gummi"
                 },
                 name: "TheFirstGame",
                 timeStamp: "2014-12-02T11:32:29"
