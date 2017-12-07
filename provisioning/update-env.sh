@@ -35,6 +35,9 @@ ssh -o StrictHostKeyChecking=no -i "~/aws/${SECURITY_GROUP_NAME}.pem" ec2-user@$
 echo Instance ready...going to run this:
 ssh -o StrictHostKeyChecking=no -i "~/aws/${SECURITY_GROUP_NAME}.pem" ec2-user@${INSTANCE_PUBLIC_NAME} "cat ~/docker-compose-and-run.sh"
 
+echo Setting the git commit rev to environment variable on the host
+ssh -o StrictHostKeyChecking=no -i "~/aws/${SECURITY_GROUP_NAME}.pem" ec2-user@${INSTANCE_PUBLIC_NAME} "export GIT_COMMIT=${GIT_COMMIT}"
+
 echo Running script
 ssh -o StrictHostKeyChecking=no -i "~/aws/${SECURITY_GROUP_NAME}.pem" ec2-user@${INSTANCE_PUBLIC_NAME} "~/docker-compose-and-run.sh ${GIT_COMMIT}"
 
