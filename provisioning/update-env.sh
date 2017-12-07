@@ -38,7 +38,7 @@ echo Instance ready...going to run this:
 ssh -o StrictHostKeyChecking=no -i "~/aws/${SECURITY_GROUP_NAME}.pem" ec2-user@${INSTANCE_PUBLIC_NAME} "cat ~/docker-compose-and-run.sh"
 
 echo Setting the git commit rev to environment variable on the host
-echo "GIT_COMMIT=$GIT_COMMIT" > .env
+echo "GIT_COMMIT=${GIT_COMMIT}" > .env
 scp -o StrictHostKeyChecking=no -i "~/aws/${SECURITY_GROUP_NAME}.pem" ./.env ec2-user@${INSTANCE_PUBLIC_NAME}:~/.env
 
 echo Running script
