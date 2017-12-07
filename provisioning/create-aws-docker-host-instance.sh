@@ -53,7 +53,7 @@ fi
 
 
 MY_CIDR=${MY_PUBLIC_IP}/32
-MY_PRIVATE_CIDR=${MY_PUBLIC_IP}/32
+MY_PRIVATE_CIDR=${MY_PRIVATE_IP}/32
 
 echo Using CIDR ${MY_CIDR} for access restrictions.
 
