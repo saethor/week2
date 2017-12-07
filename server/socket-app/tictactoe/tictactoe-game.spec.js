@@ -165,43 +165,6 @@ function game(){
     return me;
 }
 
-let createEvent = {
-    gameId:"123987",
-    type: "GameCreated",
-    user: {
-        userName: "TheGuy"
-    },
-    name: "TheFirstGame",
-    timeStamp: "2014-12-02T11:29:29"
-};
-
-let joinEvent = {
-    gameId:"123987",
-    type: "GameJoined",
-    user: {
-        userName: "Gummi"
-    },
-    name: "TheFirstGame",
-    timeStamp: "2014-12-02T11:29:29"
-};
-
-function moveEvent(user, x, y, side){
-    return {
-        gameId:"123987",
-        type: "MovePlaced",
-        user: {
-            userName: user
-        },
-        name: "TheFirstGame",
-        cord: {
-            x: x,
-            y: y
-        },
-        side: side,
-        timeStamp: "2014-12-02T11:30:29"
-    }
-}
-
 describe('create game command', function() {
 
 
