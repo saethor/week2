@@ -2,7 +2,7 @@
 set -e
 
 echo "Check for instance information..."
-INSTANCE_DIR="~/aws"
+INSTANCE_DIR=~/aws
 
 export AMI_IMAGE_ID="ami-1a962263"
 
@@ -11,7 +11,7 @@ echo No instance information present, continuing.
 
 USERNAME=$(aws iam get-user --query 'User.UserName' --output text)
 
-SECURITY_GROUP_NAME=hgop-${USERNAME}
+SECURITY_GROUP_NAME=hgop-${USERNAME}-tictactoe
 
 echo "Using security group name ${SECURITY_GROUP_NAME}"
 

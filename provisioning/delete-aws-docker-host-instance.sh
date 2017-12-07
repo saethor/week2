@@ -13,8 +13,8 @@ echo Instance ${INSTANCE_ID} terminated
 rm ~/aws/instance-id.txt
 rm ~/aws/instance-public-name.txt
 
-#aws ec2 delete-security-group --group-id ${SECURITY_GROUP_ID}
-#
-#aws ec2 delete-key-pair --key-name ${SECURITY_GROUP_NAME}
-#
-#rm  -rf ec2_instance
+aws ec2 delete-security-group --group-id ${SECURITY_GROUP_ID}
+
+aws ec2 delete-key-pair --key-name ${SECURITY_GROUP_NAME}
+
+rm  -rf ~/aws

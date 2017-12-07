@@ -4,7 +4,7 @@ set -e
 
 if [ -z "$GIT_COMMIT" ];
 then
-    export GIT_COMMIT='da2f19126787dd312a33f3178f397f5e2b6f55e1'
+    export GIT_COMMIT=$(git rev-parse HEAD)
 fi
 
 INSTANCE_ID=$(cat ~/aws/instance-id.txt)
