@@ -338,59 +338,21 @@ describe('Place move command', function() {
         then = game().placed("TheGuy", "X", 2, 0).winner("TheGuy", "X").events();
     });
 
-    it("It should emit gameWon if one on last move", function(){
-        given = [
-            createEvent,
-            joinEvent,
-            moveEvent("TheGuy", 0, 0, "X"),
-            moveEvent("Gummi", 0, 1, "O"),
-            moveEvent("TheGuy", 0, 2, "X"),
-            moveEvent("Gummi", 1, 0, "O"),
-            moveEvent("TheGuy", 1, 1, "X"),
-            moveEvent("Gummi", 1, 2, "O"),
-            moveEvent("TheGuy", 2, 1, "X"),
-            moveEvent("Gummi", 2, 0, "O")
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "TheGuy"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 2,
-                y: 2
-            },
-            side: "X",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId: "123987",
-                type: "MovePlaced",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 2,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            },
-            {
-                gameId: "123987",
-                type:"GameWon",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+    it("It should emit gameWon if won on last move", function(){
+        given = game()
+               .created("TheGuy")
+               .joined("Gummi")
+               .placed("TheGuy", "X", 0, 0)
+               .placed("Gummi", "O", 0, 1)
+               .placed("TheGuy", "X", 0, 2)
+               .placed("Gummi", "O", 1, 0)
+               .placed("TheGuy", "X", 1, 1)
+               .placed("Gummi", "O", 1, 2)
+               .placed("TheGuy", "X", 2, 1)
+               .placed("Gummi", "O", 2, 0)
+               .events();
+        when = game().placeMove("TheGuy", "X", 2, 2);
+        then = game().placed("TheGuy", "X", 2, 2).winner("TheGuy", "X").events();
     });
 
     it("It should emit gameDraw if game is draw", function(){
