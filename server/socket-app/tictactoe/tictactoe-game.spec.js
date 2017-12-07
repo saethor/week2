@@ -345,6 +345,6 @@ describe('Place move command', function() {
                .placed("Gummi", "O", 2, 2)
                .events();
         when = game().placeMove("TheGuy", "X", 1, 2);
-        then = game().placed("TheGuy", "O", 1, 2).draw().events();
+        then = game().placed("TheGuy", "X", 1, 2).draw().events();
     });
 })
