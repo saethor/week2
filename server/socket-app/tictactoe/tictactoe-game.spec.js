@@ -25,13 +25,13 @@ function game(){
         },
         joined: (user) => {
             me.history.push({
-                gameId:"123987",
                 type: "GameJoined",
                 user: {
-                    userName: user
+                    userName: "Gummi"
                 },
                 name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
+                timeStamp: "2014-12-02T11:29:29",
+                side:'O'
             });
 
             return me;
@@ -49,6 +49,16 @@ function game(){
                 name: "TheFirstGame",
                 timeStamp: "2014-12-02T11:29:29"
             }   
+        },
+        joinGame: (user) => {
+            return {
+                type: "JoinGame",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }
         }
     }
 
@@ -139,37 +149,11 @@ describe('join game command', function () {
 
 
     it('should emit game joined event...', function () {
-
-        given = [{
-            type: "GameCreated",
-            user: {
-                userName: "TheGuy"
-            },
-            name: "TheFirstGame",
-            timeStamp: "2014-12-02T11:29:29"
-        }
-        ];
-        when =
-            {
-                type: "JoinGame",
-                user: {
-                    userName: "Gummi"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            };
-        then = [
-            {
-                type: "GameJoined",
-                user: {
-                    userName: "Gummi"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29",
-                side:'O'
-            }
-        ];
-
+        
+        given = game().created("TheGuy").events();
+        when = game().joinGame("Gummi");
+        then = game().joined("Gummi").events();
+        
     });
 
     it('should emit FullGameJoinAttempted event when game full', function () {
