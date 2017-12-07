@@ -7,6 +7,54 @@ let tictactoe = require('./tictactoe-game')(inject({
     TictactoeState
 }));
 
+function game(){
+    let me = {
+        history: [],
+        created: (user) => {
+            me.history.push({
+                type: "GameCreated",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                side:'X'
+            });
+
+            return me;
+        },
+        joined: (user) => {
+            me.history.push({
+                gameId:"123987",
+                type: "GameJoined",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            });
+
+            return me;
+        },
+        events: () => {
+            return me.history;
+        },
+        createGame: (user) => {
+            return {
+                id:"123987",
+                type: "CreateGame",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }   
+        }
+    }
+
+    return me;
+}
+
 let createEvent = {
     gameId:"123987",
     type: "GameCreated",
@@ -64,28 +112,9 @@ describe('create game command', function() {
 
     it('should emit game created event', function(){
 
-        given = [];
-        when =
-            {
-                id:"123987",
-                type: "CreateGame",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            };
-        then = [
-            {
-                type: "GameCreated",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29",
-                side:'X'
-            }
-        ];
+        given = game().events();
+        when = game().createGame("TheGuy");
+        then = game().created("TheGuy").events();
 
     })
 });
