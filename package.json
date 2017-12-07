@@ -32,7 +32,7 @@
     "startclient": "cd ./client && npm run start",
     "buildclient": "cd ./client && npm run build",
     "clean": "if [ -d ./build ]; then rm -r ./build; fi",
-    "startserver": "export NODE_PATH=. && npm run migratedb && nodemon run.js",
+    "startserver": "export NODE_PATH=. && npm run migratedb-dev && nodemon run.js",
     "createbuild": "[ -d build ] || mkdir build ",
     "build": "export NODE_PATH=. && npm run clean && npm run createbuild && npm run buildclient && mv client/build build/static && cp -R server build/server && mkdir -p build/client/src && cp -r client/src/common build/client/src && cp run.js build && cp runserver.sh build",
     "test": "export NODE_PATH=. && ./node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./jasmine.json",
@@ -42,6 +42,7 @@
     "watchapitest": "export NODE_PATH=. && nodemon ./node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./jasmine-apitest.json",
     "watchloadtest": "export NODE_PATH=. && nodemon ./node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./jasmine-loadtest.json",
     "migratedb": "db-migrate --config ./server/database.json --migrations-dir ./server/migrations up",
+    "migratedb-dev": "db-migrate --config ./server/database-dev.json --migrations-dir ./server/migrations up",
     "startpostgres": "docker run -p 5432:5432 --name pg2 -e POSTGRES_PASSWORD=mysecretpassword -d postgres 2>/dev/null || docker start pg2 && docker ps | grep pg2",
     "connectdockerdb": "docker run -it --rm --link pg2:postgres postgres psql -h postgres -U postgres"
   }
