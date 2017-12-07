@@ -65,16 +65,16 @@ function game(){
 
             return me;
         },
-        illegalMove: () => {
+        illegalMove: (user, x, y) => {
             me.history.push({
                 type: "IllegalMove",
                 user: {
-                    userName: "Gummi"
+                    userName: user
                 },
                 name: "TheFirstGame",
                 cord: {
-                    x: 1,
-                    y: 2
+                    x: x,
+                    y: y
                 },
                 timeStamp: "2014-12-02T11:29:29"
             });
@@ -245,43 +245,13 @@ describe('Place move command', function() {
     it('Should emit Illegal move when square is already occupied', function() {
         given = game().created("TheGuy").joined("Gummi").placed("TheGuy", "X", 1, 2).events();
         when = game().placeMove("Gummi", "O", 1, 2);
-        then = game().illegalMove().events();
+        then = game().illegalMove("Gummi", 1, 2).events();
     });
 
     it('Should emit Illegal move a move is placed out of bounds', function() {
-        given = [
-            createEvent,
-            joinEvent
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "TheGuy"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: -1,
-                y: 2
-            },
-            side: "X",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId:"123987",
-                type: "IllegalMove",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: -1,
-                    y: 2
-                },
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+        given = game().created("TheGuy").joined("Gummi").events();
+        when = game().placeMove("TheGuy", "X", -1, 2);
+        then = game().illegalMove("TheGuy", -1, 2).events();
     });
 
     it('Should emit not your move when attempting to move out of turn', function() {
