@@ -48,6 +48,23 @@ function game(){
 
             return me;
         },
+        placed: (user, side, x, y) => {
+            me.history.push({
+                type: "MovePlaced",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: x,
+                    y: y
+                },
+                side: side,
+                timeStamp: "2014-12-02T11:29:29"
+            });
+
+            return me;
+        },
         events: () => {
             return me.history;
         },
@@ -70,6 +87,22 @@ function game(){
                 },
                 name: "TheFirstGame",
                 timeStamp: "2014-12-02T11:29:29"
+            }
+        },
+        placeMove: (user, side, x, y) => {
+            return {
+                id: "123987",
+                type: "PlaceMove",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: x,
+                    y: y
+                },
+                side: side,
+                timeStamp: "2014-12-02T11:29:29", 
             }
         }
     }
@@ -188,39 +221,9 @@ describe('Place move command', function() {
     });
 
     it('should emit MovePlaced on first game move', function() {
-
-        given = [
-            createEvent,
-            joinEvent
-        ]
-        when = {
-            type: "PlaceMove",
-            user: {
-                userName: "Gunni"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 1,
-                y: 2
-            },
-            side: "X",
-            timeStamp: "2014-12-02T11:30:29", 
-        };
-        then = [
-            {
-                type: "MovePlaced",
-                user: {
-                    userName: "Gunni"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 1,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:30:29"
-            }
-        ];
+        given = game().created("TheGuy").joined("Gummi").events();
+        when = game().placeMove("TheGuy", "X", 1, 2);
+        then = game().placed("TheGuy", "X", 1, 2).events();
     });
 
     it('Should emit Illegal move when square is already occupied', function() {
