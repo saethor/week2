@@ -36,6 +36,18 @@ function game(){
 
             return me;
         },
+        fullGameJoinAttempted: (user) => {
+            me.history.push({
+                type: "FullGameJoinAttempted",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+            });
+
+            return me;
+        },
         events: () => {
             return me.history;
         },
@@ -121,12 +133,10 @@ describe('create game command', function() {
 
 
     it('should emit game created event', function(){
-
         given = game().events();
         when = game().createGame("TheGuy");
         then = game().created("TheGuy").events();
-
-    })
+    });
 });
 
 
@@ -149,50 +159,15 @@ describe('join game command', function () {
 
 
     it('should emit game joined event...', function () {
-        
         given = game().created("TheGuy").events();
         when = game().joinGame("Gummi");
         then = game().joined("Gummi").events();
-        
     });
 
     it('should emit FullGameJoinAttempted event when game full', function () {
-        given = [
-            {
-                type: "GameCreated",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            },
-            {
-                type: "GameJoined",
-                user: {
-                    userName: "Gummi"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            }
-        ];
-        when = {
-            type: "JoinGame",
-            user: {
-                userName: "Gunni"
-            },
-            name: "TheFirstGame",
-            timeStamp: "2014-12-02T11:30:29"
-        };
-        then = [
-            {
-                type: "FullGameJoinAttempted",
-                user: {
-                    userName: "Gunni"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:30:29",
-            }
-        ]
+        given = game().created("TheGuy").joined("Gummi").events();
+        when = game().joinGame("Gunni");
+        then = game().fullGameJoinAttempted("Gunni").events();
     });
 });
 
