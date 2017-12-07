@@ -106,6 +106,19 @@ function game(){
 
             return me;
         },
+        draw: () => {
+            me.history.push({
+                type:"GameDraw",
+                user: {
+                    userName: "TheGuy"
+                },
+                name: "TheFirstGame",
+                side: "X",
+                timeStamp: "2014-12-02T11:29:29"
+            });
+
+            return me;
+        },
         events: () => {
             return me.history;
         },
@@ -356,57 +369,19 @@ describe('Place move command', function() {
     });
 
     it("It should emit gameDraw if game is draw", function(){
-        given = [
-            createEvent,
-            joinEvent,
-            moveEvent("TheGuy", 0, 0, "X"),
-            moveEvent("Gummi", 1, 0, "O"),
-            moveEvent("TheGuy", 2, 0, "X"),
-            moveEvent("Gummi", 0, 1, "O"),
-            moveEvent("TheGuy", 1, 1, "X"),
-            moveEvent("Gummi", 0, 2, "O"),
-            moveEvent("TheGuy", 2, 1, "X"),
-            moveEvent("Gummi", 2, 2, "O")
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "TheGuy"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 1,
-                y: 2
-            },
-            side: "X",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId: "123987",
-                type: "MovePlaced",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 1,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            },
-            {
-                gameId: "123987",
-                type:"GameDraw",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+        given = game()
+               .created("TheGuy")
+               .joined("Gummi")
+               .placed("TheGuy", "X", 0, 0)
+               .placed("Gummi", "O", 1, 0)
+               .placed("TheGuy", "X", 2, 0)
+               .placed("Gummi", "O", 0, 1)
+               .placed("TheGuy", "X", 1, 1)
+               .placed("Gummi", "O", 0, 2)
+               .placed("TheGuy", "X", 2, 1)
+               .placed("Gummi", "O", 2, 2)
+               .events();
+        when = game().placeMove("TheGuy", "X", 1, 2);
+        then = game().placed("TheGuy", "X", 1, 2).draw().events();
     });
 })
