@@ -93,6 +93,19 @@ function game(){
 
             return me;
         },
+        winner: (user, side) => {
+            me.history.push({
+                type:"GameWon",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                side: side,
+                timeStamp: "2014-12-02T11:29:29"
+            });
+
+            return me;
+        },
         events: () => {
             return me.history;
         },
@@ -274,54 +287,16 @@ describe('Place move command', function() {
     });
 
     it("It should emit gameWon when game is won vertically", function(){
-        given = [
-            createEvent,
-            joinEvent,
-            moveEvent("TheGuy", 0, 0, "X"),
-            moveEvent("Gummi", 1, 1, "O"),
-            moveEvent("TheGuy", 0, 1, "X"),
-            moveEvent("Gummi", 1, 0, "O")
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "TheGuy"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 0,
-                y: 2
-            },
-            side: "X",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId: "123987",
-                type: "MovePlaced",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 0,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            },
-            {
-                gameId: "123987",
-                type:"GameWon",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+        given = game()
+               .created("TheGuy")
+               .joined("Gummi")
+               .placed("TheGuy", "X", 0, 0)
+               .placed("Gummi", "O", 1, 1)
+               .placed("TheGuy", "X", 0, 1)
+               .placed("Gummi", "O", 1, 0)
+               .events();
+        when = game().placeMove("TheGuy", "X", 0, 2);
+        then = game().placed("TheGuy", "X", 0, 2).winner("TheGuy", "X").events();
     });
 
     it("It should emit gameWon when game is won horizontally", function(){
