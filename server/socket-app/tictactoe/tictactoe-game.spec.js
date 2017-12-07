@@ -36,18 +36,6 @@ function game(){
 
             return me;
         },
-        fullGameJoinAttempted: (user) => {
-            me.history.push({
-                type: "FullGameJoinAttempted",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29",
-            });
-
-            return me;
-        },
         placed: (user, side, x, y) => {
             me.history.push({
                 type: "MovePlaced",
@@ -60,6 +48,34 @@ function game(){
                     y: y
                 },
                 side: side,
+                timeStamp: "2014-12-02T11:29:29"
+            });
+
+            return me;
+        },
+        fullGameJoinAttempted: (user) => {
+            me.history.push({
+                type: "FullGameJoinAttempted",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+            });
+
+            return me;
+        },
+        illegalMove: () => {
+            me.history.push({
+                type: "IllegalMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                cord: {
+                    x: 1,
+                    y: 2
+                },
                 timeStamp: "2014-12-02T11:29:29"
             });
 
@@ -227,53 +243,9 @@ describe('Place move command', function() {
     });
 
     it('Should emit Illegal move when square is already occupied', function() {
-        given = [
-            createEvent,
-            joinEvent,
-            {
-                gameId:"123987",
-                type: "MovePlaced",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 1,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:30:29"
-            }
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "Gummi"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 1,
-                y: 2
-            },
-            side: "O",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId:"123987",
-                type: "IllegalMove",
-                user: {
-                    userName: "Gummi"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 1,
-                    y: 2
-                },
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+        given = game().created("TheGuy").joined("Gummi").placed("TheGuy", "X", 1, 2).events();
+        when = game().placeMove("Gummi", "O", 1, 2);
+        then = game().illegalMove().events();
     });
 
     it('Should emit Illegal move a move is placed out of bounds', function() {
