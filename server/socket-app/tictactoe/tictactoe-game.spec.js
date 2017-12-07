@@ -313,54 +313,16 @@ describe('Place move command', function() {
     });
 
     it("It should emit gameWon when game is won diagonally", function(){
-        given = [
-            createEvent,
-            joinEvent,
-            moveEvent("TheGuy", 0, 0, "X"),
-            moveEvent("Gummi", 1, 0, "O"),
-            moveEvent("TheGuy", 1, 1, "X"),
-            moveEvent("Gummi", 0, 1, "O")
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "TheGuy"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 2,
-                y: 2
-            },
-            side: "X",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId: "123987",
-                type: "MovePlaced",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: 2,
-                    y: 2
-                },
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            },
-            {
-                gameId: "123987",
-                type:"GameWon",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                side: "X",
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+        given = game()
+               .created("TheGuy")
+               .joined("Gummi")
+               .placed("TheGuy", "X", 0, 0)
+               .placed("Gummi", "O", 1, 0)
+               .placed("TheGuy", "X", 1, 1)
+               .placed("Gummi", "O", 0, 1)
+               .events();
+        when = game().placeMove("TheGuy", "X", 2, 2);
+        then = game().placed("TheGuy", "X", 2, 2).winner("TheGuy", "X").events();
     });
 
     it("It should emit gameWon when game is won reverse diagonally", function(){
