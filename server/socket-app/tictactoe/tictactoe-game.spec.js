@@ -81,6 +81,18 @@ function game(){
 
             return me;
         },
+        notYourMove: (user) => {
+            me.history.push({
+                type: "NotYourMove",
+                user: {
+                    userName: user
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            });
+
+            return me;
+        },
         events: () => {
             return me.history;
         },
@@ -97,6 +109,7 @@ function game(){
         },
         joinGame: (user) => {
             return {
+                id:"123987",
                 type: "JoinGame",
                 user: {
                     userName: user
@@ -255,35 +268,9 @@ describe('Place move command', function() {
     });
 
     it('Should emit not your move when attempting to move out of turn', function() {
-        given = [
-            createEvent,
-            joinEvent,
-        ];
-        when = {
-            gameId:"123987",
-            type: "PlaceMove",
-            user: {
-                userName: "Gummi"
-            },
-            name: "TheFirstGame",
-            cord: {
-                x: 1,
-                y: 2
-            },
-            side: "O",
-            timeStamp: "2014-12-02T11:32:29", 
-        };
-        then = [
-            {
-                gameId:"123987",
-                type: "NotYourMove",
-                user: {
-                    userName: "Gummi"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:32:29"
-            }
-        ];
+        given = game().created("TheGuy").joined("Gummi").events();
+        when = game().placeMove("Gummi", "O", 1, 2);
+        then = game().notYourMove("Gummi").events();
     });
 
     it("It should emit gameWon when game is won vertically", function(){
