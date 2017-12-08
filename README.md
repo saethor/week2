@@ -1,4 +1,41 @@
+## Jenkins server
+
+http://jenkins.saethor.is:8080/
+
+and 
+
+http://ec2-54-246-178-236.eu-west-1.compute.amazonaws.com:8080/
+
+username is saethor
+
+password is four letter abbreviation of the course name.
+
+Job name of the main project is __TicTacToe__
+
+## Running instance
+
+http://tictactoe.saethor.is:8080/
+
+and
+
+http://ec2-54-171-253-184.eu-west-1.compute.amazonaws.com:8080/
+
+## Changes we made
+
+We made a few changes regarding to the build process.
+
+* dockerbuild.sh
+    * Changed the account docker image is stored from _gulli_ to _hgophopur1_
+* Provisioning steps
+    * Changed default directory for settings file from _./ec2_instance_ to _~/aws_
+    * INSTANCE_INIT_SCRIPT was set to ec2-init.sh instead of docker-instance-inist.sh, changed that.
+    * When ssh-ing from one instance (jenkins) to another it does not hit the public net, because of that a private ip address is used to route between them. For that reason we changed the firewall rule to use private_ip of jenkins server instead of public.
+    * update-env.sh was failing when checking if instance was ready. When we added `set +e` around that check it fixed it. When create and update were run together it causes the ssh connection to timeout while for the new instance. If we allowed failure just when this check is performing it will check again. 
+    * In provision-new-environment.sh we added fallback GIT_COMMIT.
+    * In provision-new-environment.sh we added check to see if there exists a `~/aws` folder. If so creataws-docker-host-instance.sh is skipped and current instance is updated
+
 ## Application for HGOP 2017 Student project
+
 
 Global installation requirements:
 
