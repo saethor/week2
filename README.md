@@ -6,10 +6,6 @@ and
 
 http://ec2-54-246-178-236.eu-west-1.compute.amazonaws.com:8080/
 
-username is saethor
-
-password is four letter abbreviation of the course name.
-
 Job name of the main project is __TicTacToe__
 
 ## Running instance
