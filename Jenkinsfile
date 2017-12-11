@@ -15,6 +15,9 @@ node {
     stage('Test') {
         sh 'npm run test:nowatch'
     }
+    stage('Load Test') {
+        sh 'npm run loadtest'
+    }
     stage('Deploy') {
         sh './dockerbuild.sh'
         dir('./provisioning')
