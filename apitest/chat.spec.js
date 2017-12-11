@@ -13,7 +13,7 @@ const testAPI = TestAPI(inject({
     RoutingContext
 }));
 
-describe('User chat API', function(){
+fdescribe('User chat API', function(){
     let user;
 
     beforeEach(function(done){
@@ -31,6 +31,10 @@ describe('User chat API', function(){
 
     afterEach(function(){
         user.disconnect();
+    });
+
+    fit("should be a test", function(done) {
+
     });
 
     it('should get user session information on connect',function(done){
