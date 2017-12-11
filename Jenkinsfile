@@ -17,11 +17,14 @@ node {
     }
     stage('Build'){
         sh './dockerbuild.sh'
-        sh 'docker-compose up'
+        sh 'echo GIT_COMMIT=$(git rev-parse HEAD) > .env'
+        sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml up -d'
+        sleep 10 // wait for container to be available
     }
-    stage('API test') {
+    stage('Smoke tests') {
         sh 'npm run apitest:nowatch'
-        sh 'docker-compose down'
+        sh 'npm run loadtest'
+        sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml down'
     }
     stage('Deploy') {
         dir('./provisioning')
