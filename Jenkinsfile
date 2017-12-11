@@ -3,6 +3,7 @@ node {
     stage('Clean') {
         // Clean files from last build.
         sh 'git clean -dfxq'
+        sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml down --rmi all -v'
     }
     stage('Setup') {
         // Prefer yarn over npm.
@@ -29,11 +30,6 @@ node {
         dir('./provisioning')
         {
             sh "./provision-new-environment.sh"
-        }
-    }
-    post {
-        always {
-            sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml down'
         }
     }
 }
