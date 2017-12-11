@@ -75,6 +75,7 @@ module.exports=function(injected){
     }));
 
 
+    console.debug("[SERVER] server/socket-app/server-app-context.js;78: Initializing APITestBackdoor with dbPool, eventRouter and commandRouter");                              
     const apiTestBackdoor = APITestBackdoor(inject({
         dbPool,
         eventRouter,

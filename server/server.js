@@ -55,6 +55,7 @@ function serverModule(injected) {
             const io = SocketIo(server);
 
           //  SocketSessionManager(inject({io}));
+            console.debug("[SERVER] server/server.js;58: Calling ChatAppContext with io and dbPool");                          
             ChatAppContext(inject({io, dbPool}));
 
         }

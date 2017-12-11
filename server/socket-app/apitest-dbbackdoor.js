@@ -7,14 +7,13 @@ module.exports=function(injected){
     let repo = {
 
         cleanDatabase:function(cmdObj, errCb, successCb){
-            console.debug("server/socket-app/apitest-dbbackdoor.js;10: repo.cleanDatabase(" + JSON.stringify(cmdObj) + ", errCb, successCb)");        
+            console.debug("[SERVER] server/socket-app/apitest-dbbackdoor.js;10: cleanDatabase called with payload " + JSON.stringify(cmdObj));                                          
         
             dbPool.connect(function(err, connection, done) {
                 if(err) {
                     return console.error('error fetching db connection from pool', err);
                 }
 
-                console.debug("celaning eventlog")
                 let statement = 'DELETE FROM eventlog';
                 let statementParams = [];
                 console.warn(statement);
@@ -48,11 +47,12 @@ module.exports=function(injected){
     };
 
     commandRouter.on('cleanDatabase', function(commandObj){
-        console.debug("server/socket-app/apitest-dbbackdoor.js;50: commandRouter.on('cleanDatabase', callback)");        
+        console.debug("[SERVER] server/socket-app/apitest-dbbackdoor.js;50: handle cleanDatabase event");                                                  
         repo.cleanDatabase(commandObj, function(err){
             eventRouter.routeMessage({type:"databaseCleanError", err:err});
             console.error('Error clearing database tables: ' + err)
         }, function(){
+            console.debug("[SERVER] server/socket-app/apitest-dbbackdoor.js;55: dispatching databaseCleaned event");                                                              
             eventRouter.routeMessage({type:"databaseCleaned"});
         })
     });
