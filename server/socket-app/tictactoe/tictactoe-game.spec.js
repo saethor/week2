@@ -7,6 +7,7 @@ let tictactoe = require('./tictactoe-game')(inject({
     TictactoeState
 }));
 
+// API to run tests
 function game(){
     let me = {
         history: [],
