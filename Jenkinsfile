@@ -15,11 +15,15 @@ node {
     stage('Test') {
         sh 'npm run test:nowatch'
     }
+    stage('Build'){
+        sh './dockerbuild.sh'
+        sh 'docker-compose up'
+    }
     stage('API test') {
         sh 'npm run apitest:nowatch'
+        sh 'docker-compose down'
     }
     stage('Deploy') {
-        sh './dockerbuild.sh'
         dir('./provisioning')
         {
             sh "./provision-new-environment.sh"
