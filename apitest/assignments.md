@@ -23,12 +23,15 @@ DELETE FROM commandlog
 ```
 
 ## Push/Pop in user-api.js
-
+The user api uses a waitingFor object to manage which events it is waiting for. The api uses the push function to register an occurrence of an event it expects to receive, in the counters object, and it uses the pop function to remove a registered event type when an event of that type is received. The fluent api then works so functions which push an event to the counters object are called first to register which events are to be expected and then an action is performed which triggers that event. These functions enable simulating asynchronous execution as synchronous. If they were not implemented, it would be very difficult to test for this asynchronous execution.
 
 
 ## Race conditions in chat.spec.js
 
+
 ## Sequential code in tictactoe-game-player.js
+
+## Failing load tests in tictactoe-game-player.js
 
 ## Tictactoe load test
 
