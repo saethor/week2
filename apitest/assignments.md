@@ -25,13 +25,14 @@ DELETE FROM commandlog
 ## Push/Pop in user-api.js
 The user api uses a waitingFor object to manage which events it is waiting for. The api uses the push function to register an occurrence of an event it expects to receive, in the counters object, and it uses the pop function to remove a registered event type when an event of that type is received. The fluent api then works so functions which push an event to the counters object are called first to register which events are to be expected and then an action is performed which triggers that event. These functions enable simulating asynchronous execution as synchronous. If they were not implemented, it would be very difficult to test for this asynchronous execution.
 
-
-## Race conditions in chat.spec.js
-
-
 ## Sequential code in tictactoe-game-player.js
+Each user object registers what they need to happen before they continue execution with the callback function passed into the `then` function. 
+
+UserA will create the game and when the gameCreated event has been recevied, then userB's code will execute. UserB registers what events it needs to happen before it can continue executing the lines of code within its next `then` function, which is invoked once the appropriate events have been dispatched. UserA then registers its expected gameJoined event, and the code to be executes once that event has been dispatched. The two user objects continue alternating between executions through this use of the callback functions defined in the calls to the `then` function.
 
 ## Failing load tests in tictactoe-game-player.js
 
 ## Tictactoe load test
 
+## Race conditions in chat.spec.js (Not marked as assignment)
+Event sessionAck is racing against other init events, like databaseCleaned. Sending chat message is not a race event because we assume the state of game is stable and no events except ChatMessageReceived are expected.
