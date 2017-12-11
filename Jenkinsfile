@@ -3,6 +3,7 @@ node {
     stage('Clean') {
         // Clean files from last build.
         sh 'git clean -dfxq'
+        sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml down --rmi all -v'
     }
     stage('Setup') {
         // Prefer yarn over npm.
@@ -21,10 +22,9 @@ node {
         sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml up -d'
         sleep 10 // wait for container to be available
     }
-    stage('Smoke tests') {
+    stage('Load and API tests') {
         sh 'npm run apitest:nowatch'
         sh 'npm run loadtest'
-        sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml down'
     }
     stage('Deploy') {
         dir('./provisioning')
