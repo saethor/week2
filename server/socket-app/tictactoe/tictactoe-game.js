@@ -11,27 +11,27 @@ module.exports = function(injected){
                 function applyEvents(events, moreEvents){
                     gameState.processEvents(events);
 
-                    // Check here for game state that may result in additional events
-                    if (gameState.gameWon()){
+                    if(gameState.gameWon()){
                         events.push({
-                            gameId: cmd.gameId,
-                            type: "GameWon",
-                            user: cmd.user,
-                            name: cmd.name,
-                            side: cmd.side,
-                            timeStamp: cmd.timeStamp
-                        });
+                                gameId: cmd.gameId,
+                                type: "GameWon",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp,
+                                move:cmd.move
+                            });
                     }
-                    else if (gameState.isDraw()) {
+
+                    if(gameState.gameDraw()){
                         events.push({
-                            gameId: cmd.gameId,
-                            type: "GameDraw",
-                            user: cmd.user,
-                            name: cmd.name,
-                            side: cmd.side,
-                            timeStamp: cmd.timeStamp
-                        });
+                                gameId: cmd.gameId,
+                                type: "GameDraw",
+                                user: cmd.user,
+                                name: cmd.name,
+                                timeStamp: cmd.timeStamp
+                            })
                     }
+
                     eventHandler(events);
                 }
 
@@ -77,51 +77,63 @@ module.exports = function(injected){
                             timeStamp: cmd.timeStamp
                         }]);
                     },
-                    "PlaceMove": function(cmd) {
-                        if (!gameState.playerTurn(cmd.side)){
+                    "PlaceMove": function(cmd){
+
+                        if(!gameState.gameStarted()){
                             applyEvents([{
                                 gameId: cmd.gameId,
-                                type: "NotYourMove",
+                                type:"GameNotStarted",
                                 user: cmd.user,
-                                name: cmd.name,
-                                timeStamp: cmd.timeStamp
+                                name:cmd.name,
+                                timeStamp:cmd.timeStamp,
+                                move: cmd.move
                             }]);
                             return;
                         }
-                        if (gameState.illegalMove(cmd.cord.x, cmd.cord.y)) {
+
+                        if(gameState.occupied(cmd.move.xy))
+                        {
                             applyEvents([{
                                 gameId: cmd.gameId,
-                                type: "IllegalMove",
+                                type:"IllegalMove",
                                 user: cmd.user,
-                                name: cmd.name,
-                                cord: {
-                                    x: cmd.cord.x,
-                                    y: cmd.cord.y
-                                },
-                                timeStamp: cmd.timeStamp    
-                            }])
+                                name:cmd.name,
+                                timeStamp:cmd.timeStamp,
+                                move: cmd.move
+                            }]);
                             return;
-                        };
-                        
+                        }
+                        if(!gameState.isMyMove(cmd.move.side))
+                        {
+                            applyEvents([{
+                                gameId: cmd.gameId,
+                                type:"NotYourMove",
+                                user: cmd.user,
+                                name:cmd.name,
+                                timeStamp:cmd.timeStamp,
+                                move: cmd.move
+                            }]);
+                            return;
+                        }
+
+
                         applyEvents([{
                             gameId: cmd.gameId,
                             type: "MovePlaced",
                             user: cmd.user,
                             name: cmd.name,
-                            cord: {
-                                x: cmd.cord.x,
-                                y: cmd.cord.y
-                            },
-                            side: cmd.side,
-                            timeStamp: cmd.timeStamp
+                            timeStamp: cmd.timeStamp,
+                            move: cmd.move
                         }]);
+
                     },
                     "RequestGameHistory": function(cmd){
-                        // Game does not handle this query command, is declared here for making tests more robust.
+                        // Game does not handle this command, is declared here for making tests more robust.
                     }
                 };
 
                 if(!cmdHandlers[cmd.type]){
+//                    return ;
                     throw new Error("I do not handle command of type " + cmd.type)
                 }
                 cmdHandlers[cmd.type](cmd);

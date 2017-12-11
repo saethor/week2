@@ -2,193 +2,88 @@ let should = require('should');
 let _ = require('lodash');
 
 let TictactoeState = require('./tictactoe-state')(inject({}));
-
 let tictactoe = require('./tictactoe-game')(inject({
     TictactoeState
 }));
 
-// API to run tests
-function game(){
-    let me = {
-        history: [],
-        created: (user) => {
-            me.history.push({
-                type: "GameCreated",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29",
-                side:'X'
-            });
+let createEvent = {
+    type: "GameCreated",
+    user: {
+        userName: "Gulli"
+    },
+    name: "TheFirstGame",
+    timeStamp: "2014-12-02T11:29:29"
+};
 
-            return me;
-        },
-        joined: (user) => {
-            me.history.push({
-                type: "GameJoined",
-                user: {
-                    userName: "Gummi"
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29",
-                side:'O'
-            });
+let joinEvent = {
+    type: "GameJoined",
+    user: {
+        userName: "Gummi"
+    },
+    name: "TheFirstGame",
+    timeStamp: "2014-12-02T11:29:29"
+};
 
-            return me;
+function moveEvent(coordinates, side) {
+    return {
+        type: "MovePlaced",
+        user: {
+            userName: "Gummi"
         },
-        placed: (user, side, x, y) => {
-            me.history.push({
-                type: "MovePlaced",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: x,
-                    y: y
-                },
-                side: side,
-                timeStamp: "2014-12-02T11:29:29"
-            });
-
-            return me;
-        },
-        fullGameJoinAttempted: (user) => {
-            me.history.push({
-                type: "FullGameJoinAttempted",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29",
-            });
-
-            return me;
-        },
-        illegalMove: (user, x, y) => {
-            me.history.push({
-                type: "IllegalMove",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: x,
-                    y: y
-                },
-                timeStamp: "2014-12-02T11:29:29"
-            });
-
-            return me;
-        },
-        notYourMove: (user) => {
-            me.history.push({
-                type: "NotYourMove",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            });
-
-            return me;
-        },
-        winner: (user, side) => {
-            me.history.push({
-                type:"GameWon",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                side: side,
-                timeStamp: "2014-12-02T11:29:29"
-            });
-
-            return me;
-        },
-        draw: () => {
-            me.history.push({
-                type:"GameDraw",
-                user: {
-                    userName: "TheGuy"
-                },
-                name: "TheFirstGame",
-                side: "X",
-                timeStamp: "2014-12-02T11:29:29"
-            });
-
-            return me;
-        },
-        events: () => {
-            return me.history;
-        },
-        createGame: (user) => {
-            return {
-                id:"123987",
-                type: "CreateGame",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            }   
-        },
-        joinGame: (user) => {
-            return {
-                id:"123987",
-                type: "JoinGame",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                timeStamp: "2014-12-02T11:29:29"
-            }
-        },
-        placeMove: (user, side, x, y) => {
-            return {
-                id: "123987",
-                type: "PlaceMove",
-                user: {
-                    userName: user
-                },
-                name: "TheFirstGame",
-                cord: {
-                    x: x,
-                    y: y
-                },
-                side: side,
-                timeStamp: "2014-12-02T11:29:29", 
-            }
+        name: "TheFirstGame",
+        timeStamp: "2014-12-02T11:29:29",
+        move: {
+            xy: {x: coordinates[0], y: coordinates[1]},
+            side: side
         }
-    }
-
-    return me;
+    };
 }
 
-describe('create game command', function() {
+
+describe('create game command', function () {
 
 
     let given, when, then;
 
-    beforeEach(function(){
-        given=undefined;
-        when=undefined;
-        then=undefined;
+    beforeEach(function () {
+        given = undefined;
+        when = undefined;
+        then = undefined;
     });
 
     afterEach(function () {
-        tictactoe(given).executeCommand(when, function(actualEvents){
+        tictactoe(given).executeCommand(when, function (actualEvents) {
             should(JSON.stringify(actualEvents)).be.exactly(JSON.stringify(then));
         });
     });
 
 
-    it('should emit game created event', function(){
-        given = game().events();
-        when = game().createGame("TheGuy");
-        then = game().created("TheGuy").events();
-    });
+    it('should emit game created event', function () {
+
+        given = [];
+        when =
+            {
+                id: "123987",
+                type: "CreateGame",
+                user: {
+                    userName: "Gulli"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            };
+        then = [
+            {
+                type: "GameCreated",
+                user: {
+                    userName: "Gulli"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                side: 'X'
+            }
+        ];
+
+    })
 });
 
 
@@ -210,142 +105,547 @@ describe('join game command', function () {
     });
 
 
-    it('should emit game joined event...', function () {
-        given = game().created("TheGuy").events();
-        when = game().joinGame("Gummi");
-        then = game().joined("Gummi").events();
+    it('should emit game joined event', function () {
+
+        given = [{
+            type: "GameCreated",
+            user: {
+                userName: "Gulli"
+            },
+            name: "TheFirstGame",
+            timeStamp: "2014-12-02T11:29:29"
+        }
+        ];
+        when =
+            {
+                type: "JoinGame",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            };
+        then = [
+            {
+                type: "GameJoined",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                side: 'O'
+            }
+        ];
+
     });
 
     it('should emit FullGameJoinAttempted event when game full', function () {
-        given = game().created("TheGuy").joined("Gummi").events();
-        when = game().joinGame("Gunni");
-        then = game().fullGameJoinAttempted("Gunni").events();
+
+        given = [{
+            type: "GameCreated",
+            user: {
+                userName: "Gulli"
+            },
+            name: "TheFirstGame",
+            timeStamp: "2014-12-02T11:29:29"
+        },
+            {
+                type: "GameJoined",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }
+
+        ];
+        when =
+            {
+                type: "JoinGame",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            };
+        then = [
+            {
+                type: "FullGameJoinAttempted",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }
+
+        ];
     });
 });
 
-describe('Place move command', function() {
+describe('leave game command', function () {
+
 
     let given, when, then;
-    
+
     beforeEach(function () {
         given = undefined;
         when = undefined;
         then = undefined;
     });
-    
+
     afterEach(function () {
+        let executed=false;
         tictactoe(given).executeCommand(when, function (actualEvents) {
+            should(JSON.stringify(actualEvents)).be.exactly(JSON.stringify(then));
+            executed=true;
+        });
+        should(executed).be.exactly(true);
+    });
+
+
+    it('should emit game left event', function () {
+
+        given = [
+            {
+                type: "GameCreated",
+                user: {
+                    userName: "Gulli"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            },
+            {
+                type: "GameJoined",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                side: 'O'
+            }
+        ];
+        when =
+            {
+                type: "LeaveGame",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            };
+        then = [
+            {
+                type: "GameLeft",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }
+        ];
+
+    });
+
+});
+
+
+/* jshint ignore:start */
+
+describe('place move command', function () {
+
+    let given, when, then;
+
+    beforeEach(function () {
+        given = undefined;
+        when = undefined;
+        then = undefined;
+    });
+
+    afterEach(function () {
+        tictactoe(given).executeCommand(when, function (actualEvents, moreEvents) {
+            if (moreEvents) {
+                return;
+            }
             should(JSON.stringify(actualEvents)).be.exactly(JSON.stringify(then));
         });
     });
 
-    it('should emit MovePlaced on first game move', function() {
-        given = game().created("TheGuy").joined("Gummi").events();
-        when = game().placeMove("TheGuy", "X", 1, 2);
-        then = game().placed("TheGuy", "X", 1, 2).events();
+    it('should emit MovePlaced on first game move', function () {
+
+        given = [
+            createEvent, joinEvent
+        ];
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 0},
+                    side: 'X'
+                }
+            };
+        then = [
+            moveEvent([0, 0], 'X')
+        ];
     });
 
-    it('Should emit Illegal move when square is already occupied', function() {
-        given = game().created("TheGuy").joined("Gummi").placed("TheGuy", "X", 1, 2).events();
-        when = game().placeMove("Gummi", "O", 1, 2);
-        then = game().illegalMove("Gummi", 1, 2).events();
+    it('should emit IllegalMove when square is already occupied.', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'X')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 0},
+                    side: 'X'
+                }
+            };
+        then = [
+            {
+                type: "IllegalMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 0},
+                    side: 'X'
+                }
+            }
+        ];
+
     });
 
-    it('Should emit Illegal move a move is placed out of bounds', function() {
-        given = game().created("TheGuy").joined("Gummi").events();
-        when = game().placeMove("TheGuy", "X", -1, 2);
-        then = game().illegalMove("TheGuy", -1, 2).events();
+    it('should emit IllegalMove when center move is illegal.', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 2], 'X')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 2},
+                    side: 'X'
+                }
+            };
+        then = [
+            {
+                type: "IllegalMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 2},
+                    side: 'X'
+                }
+            }
+        ];
     });
 
-    it('Should emit not your move when attempting to move out of turn', function() {
-        given = game().created("TheGuy").joined("Gummi").events();
-        when = game().placeMove("Gummi", "O", 1, 2);
-        then = game().notYourMove("Gummi").events();
+
+    it('Should emit game won on top line fill', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'X'),
+            moveEvent([0, 1], 'X'),
+            moveEvent([1, 1], 'O')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 2},
+                    side: 'X'
+                }
+            };
+        then = [
+            moveEvent([0, 2], 'X'),
+            {
+                type: "GameWon",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 0, y: 2},
+                    side: 'X'
+                }
+            }
+        ];
+
     });
 
-    it("It should emit gameWon when game is won vertically", function(){
-        given = game()
-               .created("TheGuy")
-               .joined("Gummi")
-               .placed("TheGuy", "X", 0, 0)
-               .placed("Gummi", "O", 1, 1)
-               .placed("TheGuy", "X", 0, 1)
-               .placed("Gummi", "O", 1, 0)
-               .events();
-        when = game().placeMove("TheGuy", "X", 0, 2);
-        then = game().placed("TheGuy", "X", 0, 2).winner("TheGuy", "X").events();
+    it('Should emit game won on diagonal line fill', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'X'),
+            moveEvent([1, 1], 'X'),
+            moveEvent([0, 1], 'O')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'X'
+                }
+            };
+        then = [
+            moveEvent([2, 2], 'X'),
+            {
+                type: "GameWon",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'X'
+                }
+
+            }
+        ];
+
     });
 
-    it("It should emit gameWon when game is won horizontally", function(){
-        given = game()
-               .created("TheGuy")
-               .joined("Gummi")
-               .placed("TheGuy", "X", 0, 0)
-               .placed("Gummi", "O", 1, 1)
-               .placed("TheGuy", "X", 1, 0)
-               .placed("Gummi", "O", 0, 1)
-               .events();
-        when = game().placeMove("TheGuy", "X", 2, 0);
-        then = game().placed("TheGuy", "X", 2, 0).winner("TheGuy", "X").events();
+    it('Should emit game won on vertical line fill', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'O'),
+            moveEvent([1, 1], 'O'),
+            moveEvent([0, 1], 'X')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'O'
+                }
+            };
+        then = [
+            moveEvent([2, 2], 'O'),
+            {
+                type: "GameWon",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'O'
+                }
+            }
+        ];
+
     });
 
-    it("It should emit gameWon when game is won diagonally", function(){
-        given = game()
-               .created("TheGuy")
-               .joined("Gummi")
-               .placed("TheGuy", "X", 0, 0)
-               .placed("Gummi", "O", 1, 0)
-               .placed("TheGuy", "X", 1, 1)
-               .placed("Gummi", "O", 0, 1)
-               .events();
-        when = game().placeMove("TheGuy", "X", 2, 2);
-        then = game().placed("TheGuy", "X", 2, 2).winner("TheGuy", "X").events();
+
+    it('Should not emit game draw if won on last move.', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'X'),
+            moveEvent([0, 1], 'O'),
+            moveEvent([0, 2], 'O'),
+
+            moveEvent([1, 0], 'O'),
+            moveEvent([1, 1], 'O'),
+            moveEvent([1, 2], 'X'),
+
+            moveEvent([2, 0], 'X'),
+            moveEvent([2, 2], 'X')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 1},
+                    side: 'O'
+                }
+            };
+        then = [
+            moveEvent([2, 1], 'O'),
+            {
+                type: "GameWon",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 1},
+                    side: 'O'
+                }
+            }
+        ];
+
     });
 
-    it("It should emit gameWon when game is won reverse diagonally", function(){
-        given = game()
-               .created("TheGuy")
-               .joined("Gummi")
-               .placed("TheGuy", "X", 0, 2)
-               .placed("Gummi", "O", 1, 0)
-               .placed("TheGuy", "X", 1, 1)
-               .placed("Gummi", "O", 0, 1)
-               .events();
-        when = game().placeMove("TheGuy", "X", 2, 0);
-        then = game().placed("TheGuy", "X", 2, 0).winner("TheGuy", "X").events();
+    it('Should emit game draw when neither wins', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'X'),
+            moveEvent([0, 1], 'O'),
+            moveEvent([0, 2], 'O'),
+            moveEvent([1, 0], 'O'),
+            moveEvent([1, 1], 'O'),
+            moveEvent([1, 2], 'X'),
+            moveEvent([2, 0], 'X'),
+            moveEvent([2, 1], 'X')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'O'
+                }
+            };
+        then = [
+            moveEvent([2, 2], 'O'),
+            {
+                type: "GameDraw",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29"
+            }
+        ];
     });
 
-    it("It should emit gameWon if won on last move", function(){
-        given = game()
-               .created("TheGuy")
-               .joined("Gummi")
-               .placed("TheGuy", "X", 0, 0)
-               .placed("Gummi", "O", 0, 1)
-               .placed("TheGuy", "X", 0, 2)
-               .placed("Gummi", "O", 1, 0)
-               .placed("TheGuy", "X", 1, 1)
-               .placed("Gummi", "O", 1, 2)
-               .placed("TheGuy", "X", 2, 1)
-               .placed("Gummi", "O", 2, 0)
-               .events();
-        when = game().placeMove("TheGuy", "X", 2, 2);
-        then = game().placed("TheGuy", "X", 2, 2).winner("TheGuy", "X").events();
+    it('Should emit NotYourMove if attempting to make move out of turn', function () {
+        given = [
+            createEvent,
+            joinEvent,
+            moveEvent([0, 0], 'X')
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'X'
+                }
+            };
+        then = [
+            {
+                type: "NotYourMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'X'
+                }
+            }
+        ];
+
     });
 
-    it("It should emit gameDraw if game is draw", function(){
-        given = game()
-               .created("TheGuy")
-               .joined("Gummi")
-               .placed("TheGuy", "X", 0, 0)
-               .placed("Gummi", "O", 1, 0)
-               .placed("TheGuy", "X", 2, 0)
-               .placed("Gummi", "O", 0, 1)
-               .placed("TheGuy", "X", 1, 1)
-               .placed("Gummi", "O", 0, 2)
-               .placed("TheGuy", "X", 2, 1)
-               .placed("Gummi", "O", 2, 2)
-               .events();
-        when = game().placeMove("TheGuy", "X", 1, 2);
-        then = game().placed("TheGuy", "X", 1, 2).draw().events();
-    });
-})
+    it('Should emit game not started if both sides not joined', function () {
+        given = [
+            createEvent
+        ];
+
+        when =
+            {
+                type: "PlaceMove",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'X'
+                }
+            };
+        then = [
+            {
+                type: "GameNotStarted",
+                user: {
+                    userName: "Gummi"
+                },
+                name: "TheFirstGame",
+                timeStamp: "2014-12-02T11:29:29",
+                move: {
+                    xy: {x: 2, y: 2},
+                    side: 'X'
+                }
+            }
+        ];
+
+    })
+});
+/* jshint ignore:end */

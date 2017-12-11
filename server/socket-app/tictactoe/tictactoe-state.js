@@ -3,57 +3,45 @@ const _ = require('lodash');
 module.exports = function (injected) {
 
     return function (history) {
-        let gamefull = false;
-        let board = [[undefined, undefined, undefined], [undefined, undefined, undefined], [undefined, undefined, undefined]];
-        let player = false;
-        let moves = 9;
+        let gridSize = 3;
+        let gameFull = false;
+        let gameStarted = false;
+        let gameGrid = [['', '', ''], ['', '', ''], ['', '', '']];
+        let gameScore = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let moveCount = 0;
+        let nextMove = 'X';
 
         function processEvent(event) {
-            if (event.type === "GameJoined"){
-                gamefull = true;
+            if (event.type === "GameJoined") {
+                gameFull = true;
+                gameStarted = true;
             }
             if (event.type === "MovePlaced") {
-                board[event.cord.y][event.cord.x] = event.side;
-                player = !player;
-                moves--;                
+                let point = event.move.side === 'X' ? 1 : -1;
+                let row = event.move.xy.y;
+                let col = event.move.xy.x;
+
+                gameScore[row] += point; // where point is either +1 or -1
+
+                gameScore[gridSize + col] += point;
+
+                if (row === col) gameScore[2 * gridSize] += point;
+
+                if (gridSize - 1 - col === row) gameScore[2 * gridSize + 1] += point;
+
+                moveCount++;
+                nextMove = (event.move.side==='X'?'O':'X');
+
+                gameGrid[event.move.xy.x][event.move.xy.y] = event.move.side;
             }
         }
 
-        function isDraw() {
-            return moves == 0;
-        }
+        function gameWon() {
 
-        function gameFull(){
-            return gamefull;
-        }
+            return _.reduce(gameScore, function (won, score) {
+                return won || score === 3 || score === -3;
 
-        function illegalMove(x, y) {
-            return !checkBounds(x, y) || board[y][x] !== undefined;
-        }
-
-        function playerTurn(side){
-            return (player && side === "O") || (!player && side === "X");
-        }
-
-        function checkBounds(x, y){
-            return x < 3 && x >= 0 && y < 3 && y >= 0;
-        }
-
-        function gameWon(){
-            for (var i = 0; i < 3; ++i){
-                if (board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] !== undefined){
-                    return true;
-                }
-                if (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] !== undefined){
-                    return true;
-                }
-            }
-            if (board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] !== undefined){
-                return true;
-            }
-            if (board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] !== undefined){
-                return true;
-            }    
+            }, false);
         }
 
         function processEvents(history) {
@@ -63,12 +51,24 @@ module.exports = function (injected) {
         processEvents(history);
 
         return {
-            gameFull: gameFull,
-            illegalMove: illegalMove,
-            playerTurn: playerTurn,
-            gameWon: gameWon,
-            isDraw: isDraw,
             processEvents: processEvents,
+            gameStarted: function(){
+                return gameStarted;
+            },
+            gameFull: function () {
+                return gameFull;
+            },
+            isMyMove:function(side){
+                return side===nextMove;
+            },
+            gameWon: gameWon,
+            gameDraw: function () {
+                if (gameWon()) return false;
+                return moveCount === gridSize * gridSize;
+            },
+            occupied: function (coords) {
+                return !!gameGrid[coords.x][coords.y];
+            }
         }
     };
 };
