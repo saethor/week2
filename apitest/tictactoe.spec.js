@@ -20,7 +20,7 @@ describe('Tictactoe API', function () {
     });
     
     it('should be able to play one game to end', function (done) {
-        //playGame(done);
+        playGame(done);
     });
 
 });
