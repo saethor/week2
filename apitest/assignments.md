@@ -31,7 +31,7 @@ Each user object registers what they need to happen before they continue executi
 UserA will create the game and when the gameCreated event has been recevied, then userB's code will execute. UserB registers what events it needs to happen before it can continue executing the lines of code within its next `then` function, which is invoked once the appropriate events have been dispatched. UserA then registers its expected gameJoined event, and the code to be executes once that event has been dispatched. The two user objects continue alternating between executions through this use of the callback functions defined in the calls to the `then` function.
 
 ## Failing load tests in tictactoe-game-player.js
-They did not fail. They should have.
+We tried several variations of messing up the order for playing a game but the loadtests would not fail, neither locally nor on Jenkins. The theory is that an event should be dispatched before it is expected and therefore missed so it halts execution of the test and thereby failing it. We think the event manages to get registered anyway, before the server has fired the event and so it still passes (at least it did for the numerous times we executed the test).
 
 ## Tictactoe load test
 We found out for local load tests we could run 20 games with timelimit of 1000ms. 
