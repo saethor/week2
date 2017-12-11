@@ -1,18 +1,25 @@
 node {
     checkout scm
-    stage('Commit') {
-        sh 'yarn install'
-        dir('client') {
-            sh 'yarn install'
-        }
-        sh 'npm run test'
-        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-            sh './dockerbuild.sh'
+    stage('Clean') {
+        // Clean files from last build.
+        sh 'git clean -dfxq'
+    }
+    stage('Setup') {
+        // Prefer yarn over npm.
+        sh 'yarn install || npm install'
+        dir('client')
+        {
+            sh 'yarn install || npm install'
         }
     }
+    stage('Test') {
+        sh 'npm run test:nowatch'
+    }
     stage('Deploy') {
-        dir('provisioning'){
-            sh './provision-new-environment.sh'
+        sh './dockerbuild.sh'
+        dir('./provisioning')
+        {
+            sh "./provision-new-environment.sh"
         }
     }
 }
