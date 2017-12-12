@@ -32,4 +32,5 @@ node {
             sh "./provision-new-environment.sh"
         }
     }
+    junit '**/junitreports/*.xml'
 }
