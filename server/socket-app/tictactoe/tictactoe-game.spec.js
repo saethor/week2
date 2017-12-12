@@ -600,7 +600,7 @@ describe('place move command', function () {
             {
                 type: "NotYourMove",
                 user: {
-                    userName: "Gumfoobarmi"
+                    userName: "Gummi"
                 },
                 name: "TheFirstGame",
                 timeStamp: "2014-12-02T11:29:29",
