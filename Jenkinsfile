@@ -15,6 +15,9 @@ node {
     }
     stage('Test') {
         sh 'npm run test:nowatch'
+        dir('client') {
+            sh 'npm run test:nowatch'
+        }
     }
     stage('Build'){
         sh './dockerbuild.sh'
