@@ -17,6 +17,15 @@ export default function (injected) {
         componentWillMount(){
             this.unsubscribe = eventRouter.on('MovePlaced', (moveEvent)=>{
             //    Key logic goes here. Remember---the cell gets all move events, not only its own.
+                let move = moveEvent.move;
+                let x = move.xy.x;
+                let y = move.xy.y;
+                let coordinates = this.props.coordinates;
+                if (coordinates.x === x && coordinates.y === y) {
+                    this.setState((prevState, props) => {
+                        return { move }
+                    });
+                }
             })
         }
         componentWillUnmount(){
