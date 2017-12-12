@@ -23,7 +23,7 @@ DELETE FROM commandlog
 ```
 
 ## Push/Pop in user-api.js
-The user api uses a waitingFor object to manage which events it is waiting for. The api uses the push function to register an occurrence of an event it expects to receive, in the counters object, and it uses the pop function to remove a registered event type when an event of that type is received. The fluent api then works so functions which push an event to the counters object are called first to register which events are to be expected and then an action is performed which triggers that event. These functions enable simulating asynchronous execution as synchronous. If they were not implemented, it would be very difficult to test for this asynchronous execution.
+The user api uses a waitingFor object to manage which events it is waiting for. The api uses the push function to register an occurrence of an event it expects to receive, in the counters object, and it uses the pop function to remove a registered event type when an event of that type is received. The fluent api then works so functions which push an event to the counters object are called first to register which events are to be expected and then an action is performed which triggers that event. These functions enable simulating asynchronous execution as synchronous. If they were not implemented, it would be very difficult to test this asynchronous execution for consistent behaviour.
 
 ## Sequential code in tictactoe-game-player.js
 Each user object registers what they need to happen before they continue execution with the callback function passed into the `then` function. 
@@ -31,8 +31,12 @@ Each user object registers what they need to happen before they continue executi
 UserA will create the game and when the gameCreated event has been recevied, then userB's code will execute. UserB registers what events it needs to happen before it can continue executing the lines of code within its next `then` function, which is invoked once the appropriate events have been dispatched. UserA then registers its expected gameJoined event, and the code to be executes once that event has been dispatched. The two user objects continue alternating between executions through this use of the callback functions defined in the calls to the `then` function.
 
 ## Failing load tests in tictactoe-game-player.js
+We tried several variations of messing up the order for playing a game but the loadtests would not fail, neither locally nor on Jenkins. The theory is that an event should be dispatched before it is expected and therefore missed so it halts execution of the test and thereby failing it. We think the event manages to get registered anyway, before the server has fired the event and so it still passes (at least it did for the numerous times we executed the test).
 
 ## Tictactoe load test
+We found out for local load tests we could run 20 games with timelimit of 1000ms. 
+
+For Jenkins we got 40 games in 5000ms.
 
 ## Race conditions in chat.spec.js (Not marked as assignment)
 Event sessionAck is racing against other init events, like databaseCleaned. Sending chat message is not a race event because we assume the state of game is stable and no events except ChatMessageReceived are expected.
