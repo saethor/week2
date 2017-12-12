@@ -1,5 +1,8 @@
 node {
     checkout scm
+    environment {
+        CI = 'true'
+    }
     stage('Clean') {
         // Clean files from last build.
         sh 'git clean -dfxq'
