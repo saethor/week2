@@ -17,14 +17,16 @@ node {
         }
     }
     stage('Test') {
-        withEnv(['CI=true']) {
-
-        }
-        sh 'npm run test:nowatch'
-        dir('client') {
-            withEnv(['CI=true']) {
-                sh 'npm run test:nowatch'
+        try {
+            sh 'npm run test:nowatch'
+            dir('client') {
+                withEnv(['CI=true']) {
+                    sh 'npm run test:nowatch'
+                }
             }
+        } catch (err) {
+            junit '**/junitreports/*.xml'        
+            throw err
         }
     }
     stage('Build'){
@@ -34,8 +36,13 @@ node {
         sleep 10 // wait for container to be available
     }
     stage('Load and API tests') {
-        sh 'npm run apitest:nowatch'
-        sh 'npm run loadtest'
+        try {
+            sh 'npm run apitest:nowatch'
+            sh 'npm run loadtest'
+        } catch (err) {
+            junit '**/junitreports/*.xml'        
+            throw err
+        }
     }
     stage('Deploy') {
         dir('./provisioning')
