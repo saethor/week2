@@ -36,7 +36,7 @@ describe("Tic Cell", function () {
 
 
     it('should render without error', function () {
-
+        console.debug(component);
     });
 
     it('should do more stuff', function () {
