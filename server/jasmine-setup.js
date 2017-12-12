@@ -15,4 +15,4 @@ let junitReporter = new reporters.JUnitXmlReporter({
     consolidateAll: false
 });
 jasmine.getEnv().addReporter(consoleReporter);
-jasmine.getEnv().addReporter(junitReporters);
+jasmine.getEnv().addReporter(junitReporter);
