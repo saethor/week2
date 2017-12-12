@@ -20,7 +20,9 @@ node {
         try {
             sh 'npm run test:nowatch'
             dir('client') {
-                sh 'npm run test:nowatch'
+                withEnv(['CI=true']) {
+                    sh 'npm run test:nowatch'
+                }
             }
         } catch (err) {
             junit '**/junitreports/*.xml'        
