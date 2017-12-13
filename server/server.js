@@ -16,6 +16,7 @@ function serverModule(injected) {
     const dbConfig = DbConfig[process.env.DB_ENV || 'dev'];
 
     const ChatAppContext = require('./socket-app/server-app-context');
+    const exec = require('child_process').exec;
 
     return {
         startServer: function(CALLBACK){
@@ -42,22 +43,38 @@ function serverModule(injected) {
 
             app.use(Session(sessionOpts));
 
+            
             require('./http-routes/api')(
                 inject({app})
             );
+            
+            app.get('/500', function(req, res){
+                foobar;
+            });
 
-            app.get('/*', function (req, res) {
+            app.get('/', function (req, res) {
                 // Render index.html in all cases and pass route handling to react
                 res.sendFile(Path.join(__dirname,'static','index.html'));
             });
+            
+            app.use(function(req, res, next){
+                // 404 error here
+                const datadog = exec('sh ' + Path.join(__dirname, '..', 'datadog.sh 404'));
+                next();
+            });
 
+            app.use(function(err, req, res, next){
+                // 500 error here
+                const datadog = exec('sh ' + Path.join(__dirname, '..', 'datadog.sh 500'));
+                next(err);
+            });
+            
             const server = app.listen(PORT, CALLBACK);
             const io = SocketIo(server);
 
           //  SocketSessionManager(inject({io}));
             console.debug("[SERVER] server/server.js;58: Calling ChatAppContext with io and dbPool");                          
             ChatAppContext(inject({io, dbPool}));
-
         }
     }
 }

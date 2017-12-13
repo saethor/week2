@@ -6,6 +6,7 @@ services:
       - 'POSTGRES_PORT=5432'
       - 'PORT=8000'
       - 'DB_ENV=prod'
+      - 'DATADOG_API_KEY'
     image: 'hgophopur1/tictactoe:${GIT_COMMIT}'
     ports:
       - '8000:8000'

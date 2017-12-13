@@ -32,6 +32,9 @@ node {
     stage('Build'){
         sh './dockerbuild.sh'
         sh 'echo GIT_COMMIT=$(git rev-parse HEAD) > .env'
+        withCredentials([string(credentialsId: 'DATADOG_API_KEY', variable: 'DATADOG_API_KEY')]) {
+            sh 'echo $DATADOG_API_KEY >> .env'
+        }
         sh '/usr/local/bin/docker-compose -f ./provisioning/docker-compose.yaml up -d'
         sleep 10 // wait for container to be available
     }
