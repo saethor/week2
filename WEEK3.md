@@ -1,6 +1,14 @@
 # Week3 assignment
 ## TODO
 
+[Jenkins (username and password is in comment on canvas)](http://jenkins.saethor.is:8080/)
+
+[TicTacToe](http://tictactoe.saethor.is:8000/)
+
+[Datadog](https://p.datadoghq.com/sb/fb0bb1922-3e0d7851d7)
+
+
+
 * [x] Completed the migrations needed for the application to work
 * [x] On Git push Jenkins pulls my code and the Tic Tac Toe application is deployed through a build pipeline, but only if all my tests are successful
 * [x] Filled out the Assignments: for the API and Load tests
