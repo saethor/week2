@@ -48,7 +48,8 @@ export default function (injected) {
                     this.setState({
                         currentGame: {
                             gameId: gameJoined.gameId,
-                            side: gameJoined.side
+                            side: gameJoined.side,
+                            winner: ""
                         }
                     });
                 }
@@ -85,9 +86,19 @@ export default function (injected) {
                 })
             };
 
+            const gameOver = (gameOver) => {
+                let currentGame = this.state.currentGame;
+                const winner = gameOver.move.side;
+                currentGame["winner"] = `Game over, winner is: ${winner}`;
+                this.setState({
+                    currentGame: currentGame
+                });
+            }
+
             eventRouter.on('GameJoined', gameJoined);
             eventRouter.on('GameCreated', gameCreated);
             eventRouter.on('GameLeft', gameLeft);
+            eventRouter.on('GameWon', gameOver);
 
             queryRouter.on('GameHistory', function (gameHistory) {
                 _.each(gameHistory.resultSet, function (event) {
@@ -164,6 +175,7 @@ export default function (injected) {
             if (this.state.currentGame.gameId) {
                 gameView = <div>
                     <button type="button" onClick={this.leaveGame}>Leave</button>
+                    <h4>{this.state.currentGame.winner}</h4>
                     <TictactoeBoard gameId={this.state.currentGame.gameId}
                                     mySide={this.state.currentGame.side}></TictactoeBoard>
                     <TictactoeMessage></TictactoeMessage>

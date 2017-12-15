@@ -11,7 +11,8 @@ export default function (injected) {
             this.state = {
                 move:{
 
-                }
+                },
+                disabled: false
             }
         }
         componentWillMount(){
@@ -27,11 +28,20 @@ export default function (injected) {
                     });
                 }
             })
+            this.unsubscribeGameWon = eventRouter.on('GameWon', (gameWon) => {
+                let state = this.state;
+                state['disabled'] = true;                
+                this.setState(state);
+            });
         }
         componentWillUnmount(){
             this.unsubscribe();
+            this.unsubscribeGameWon();
         }
         placeMove(coordinates){
+            if (this.state.disabled) {
+                return function(){};
+            }
             return ()=>{
                 let cmdId = generateUUID();
                 commandPort.routeMessage({
