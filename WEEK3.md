@@ -15,4 +15,4 @@
 * [x] My test reports are published in Jenkins
 * [x] My Tic Tac Toe game works, two people can play a game till the end and be notified who won.
 * [x] My TicCell is tested
-* [x] I've set up Datadog
+* [x] I've set up Datadog, we added a route ( /500 ) to generate a 500 error to test datadog events.
